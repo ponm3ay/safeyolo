@@ -1,0 +1,14 @@
+# 训练超参数配置
+# 说明：
+#   model   模型别名（yolov8 / yolo11 等），决定默认预训练权重
+#   weights 预训练权重：放在 models/pretrained/ 下，或直接写名称由 Ultralytics 自动下载
+#   device  0 / 0,1 / cpu
+model: yolov8
+weights: yolov8n.pt
+data: dataset/data.yaml
+epochs: 100
+batch: 16
+imgsz: 640
+device: 0
+workers: 8
+seed: 42

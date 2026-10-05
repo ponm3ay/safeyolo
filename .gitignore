@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# 测试 / 工具缓存
+.pytest_cache/
+.ruff_cache/
+.coverage
+
+# IDE
+.idea/
+.vscode/
+
+# 训练产物与本地数据（不入库）
+runs/
+logs/
+models/
+raw/
+*.pt
+*.onnx
+*.engine
+*.log
+dataset/**/*.cache
+
+# 系统
+.DS_Store
+Thumbs.db

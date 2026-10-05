@@ -1,0 +1,13 @@
+# 安全帽检测数据集配置（数据准备脚本 safeyolo prepare 会重新生成本文件）
+# path 为数据集根目录；训练时由 safeyolo 生成含绝对路径的运行时配置，本文件使用相对路径便于跨机器
+path: .
+train: images/train
+val: images/val
+test: images/test
+nc: 5
+names:
+- head
+- ordinary_clothes
+- person
+- reflective_vest
+- safety_helmet
