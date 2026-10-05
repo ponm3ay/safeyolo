@@ -103,7 +103,8 @@ def voc_to_yolo(
         logger.error("目录下无有效 VOC XML 标注: %s", annotations_dir)
         return []
 
-    class_order = sorted(set(class_order or discovered_names))
+    # 显式传入的类别顺序必须原样保留（决定 txt 中的类别 id），仅自动模式才排序
+    class_order = list(dict.fromkeys(class_order)) if class_order else sorted(discovered_names)
     class_to_id = {name: idx for idx, name in enumerate(class_order)}
 
     yolo_output_dir.mkdir(parents=True, exist_ok=True)
@@ -115,6 +116,10 @@ def voc_to_yolo(
                 continue
             box = _voc_bbox_to_yolo(obj["bbox"], result["width"], result["height"])
             lines.append(f"{class_to_id[obj['name']]} " + " ".join(f"{v:.6f}" for v in box))
+        if not lines:
+            # 无有效标注的图片不生成空标签，避免引入未标注的背景样本
+            logger.warning("标注无有效目标，跳过: %s", xml_path.name)
+            continue
         txt_path = yolo_output_dir / (xml_path.stem + ".txt")
         with open(txt_path, "w", encoding="utf-8") as f:
             f.write("\n".join(lines))

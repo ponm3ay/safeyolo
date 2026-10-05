@@ -46,7 +46,7 @@ def coco_to_yolo(
     yolo_output_dir = Path(yolo_output_dir)
 
     try:
-        with open(json_path, "r", encoding="utf-8") as f:
+        with open(json_path, encoding="utf-8") as f:
             data: dict[str, Any] = json.load(f)
     except (OSError, json.JSONDecodeError) as exc:
         logger.error("解析 COCO JSON 失败: %s | %s", json_path, exc)
@@ -54,7 +54,8 @@ def coco_to_yolo(
 
     categories = data.get("categories", [])
     id_to_name = {cat["id"]: cat["name"] for cat in categories}
-    class_order = sorted(set(class_order or id_to_name.values()))
+    # 显式传入的类别顺序必须原样保留（决定 txt 中的类别 id），仅自动模式才排序
+    class_order = list(dict.fromkeys(class_order)) if class_order else sorted(set(id_to_name.values()))
     class_to_id = {name: idx for idx, name in enumerate(class_order)}
 
     images = {img["id"]: img for img in data.get("images", [])}
@@ -84,6 +85,10 @@ def coco_to_yolo(
             lines.append(f"{class_to_id[name]} " + " ".join(f"{v:.6f}" for v in box))
 
         txt_path = yolo_output_dir / (Path(file_name).stem + ".txt")
+        if not lines:
+            # 无有效标注的图片不生成空标签，避免引入未标注的背景样本
+            logger.warning("图片无有效标注，跳过: %s", file_name)
+            continue
         with open(txt_path, "w", encoding="utf-8") as f:
             f.write("\n".join(lines))
         written += 1

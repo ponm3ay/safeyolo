@@ -67,7 +67,7 @@ def convert_to_yolo(
             return list(class_order)
         ids: set[int] = set()
         for txt in yolo_output_dir.glob("*.txt"):
-            with open(txt, "r", encoding="utf-8") as f:
+            with open(txt, encoding="utf-8") as f:
                 for line in f:
                     first = line.strip().split(" ")[0]
                     if first.isdigit():

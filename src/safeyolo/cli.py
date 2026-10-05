@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import argparse
 import sys
-from typing import Sequence
+from collections.abc import Sequence
 
 from safeyolo import __version__
 from safeyolo.config import load_train_config
@@ -166,7 +166,7 @@ def cmd_train(args: argparse.Namespace) -> int:
 def _cmd_eval(args: argparse.Namespace, split: str) -> int:
     from safeyolo.validation.evaluator import evaluate
 
-    logger = get_logger(LOGS_DIR, "validate", logger_name="safeyolo.validate")
+    get_logger(LOGS_DIR, "validate", logger_name="safeyolo.validate")
     evaluate(
         weights=args.weights,
         data_yaml=args.data,

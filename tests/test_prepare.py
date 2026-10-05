@@ -80,7 +80,7 @@ class TestDatasetPreparer:
             annotation_format="yolo",
             classes=["a"],
         )
-        with pytest.raises(RuntimeError, match="未找到任何可配对"):
+        with pytest.raises(RuntimeError, match="标注转换失败"):
             preparer.prepare()
 
 

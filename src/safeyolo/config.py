@@ -34,7 +34,7 @@ def load_yaml(path: str | Path) -> dict[str, Any]:
     """读取 YAML 文件，空文件返回空字典。"""
     path = Path(path)
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             data = yaml.safe_load(f) or {}
     except FileNotFoundError as exc:
         raise FileNotFoundError(f"配置文件不存在: {path}") from exc
